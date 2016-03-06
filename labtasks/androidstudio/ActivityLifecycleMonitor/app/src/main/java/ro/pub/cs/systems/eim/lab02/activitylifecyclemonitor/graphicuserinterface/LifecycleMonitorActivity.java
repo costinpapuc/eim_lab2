@@ -69,6 +69,12 @@ public class LifecycleMonitorActivity extends Activity {
         Button cancelButton = (Button)findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(buttonClickListener);
 
+//        if(savedInstanceState != null) {
+//            ((EditText)findViewById(R.id.username_edit_text)).setText(savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT));
+//            ((EditText)findViewById(R.id.password_edit_text)).setText(savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT));
+//            ((CheckBox)findViewById(R.id.remember_me_checkbox)).setChecked(true);
+//        }
+
         String msg = savedInstanceState == null ? "without" : "with";
         Log.d(Constants.TAG, "onCreate method was invoked " + msg + " saved instance state");
     }
@@ -107,6 +113,27 @@ public class LifecycleMonitorActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(Constants.TAG, "onDestroy method was invoked");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        CheckBox rememberMe = (CheckBox) findViewById(R.id.remember_me_checkbox);
+        if(rememberMe.isChecked()) {
+            outState.putString(Constants.USERNAME_EDIT_TEXT, ((EditText)findViewById(R.id.username_edit_text)).getText().toString());
+            outState.putString(Constants.PASSWORD_EDIT_TEXT, ((EditText)findViewById(R.id.password_edit_text)).getText().toString());
+            outState.putBoolean(Constants.REMEMBER_ME_CHECKBOX, true);
+        }
+        super.onSaveInstanceState(outState);
+        Log.d(Constants.TAG, "onSaveInstanceState method was invoked");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        ((EditText)findViewById(R.id.username_edit_text)).setText(savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT));
+        ((EditText)findViewById(R.id.password_edit_text)).setText(savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT));
+        ((CheckBox)findViewById(R.id.remember_me_checkbox)).setChecked(true);
+        Log.d(Constants.TAG, "onRestoreInstanceState method was invoked");
     }
 
     @Override
